@@ -221,8 +221,3 @@ def get_free_spline(source_points):
 def get_hermite_spline(source_points, vector1, vector2):
     S_matrix = calculate_hermite_S_matrix(source_points, vector1, vector2)
     return get_points_from_S_matrix(S_matrix)
-
-
-# source = [[4.,0.],[0.,3.],[0.,0.]]
-# calculate_hermite_S_matrix(source)
-

@@ -1,5 +1,6 @@
-import numpy as np
+
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 
 import sys
 sys.path.append(".")
@@ -61,10 +62,17 @@ def draw_free_spline(points):
 def draw_hermite_spline(points):
     x_polynomes_arr, y_polynomes_arr = get_hermite_spline(points_arr[1:len(points_arr)-1], [1.5,1.5],[-2.,1.])#points_arr[0], points_arr[len(points_arr)-1])
 
+    style = "Simple,tail_width=0.5,head_width=4,head_length=8"
+    kw = dict(arrowstyle=style, color="k", lw=2)
+    arrow1 = patches.FancyArrowPatch(points_arr[1], points_arr[0], **kw)
+    arrow2 = patches.FancyArrowPatch(points_arr[len(points_arr) - 2], points_arr[len(points_arr) - 1], **kw)
+
+    plt.gca().add_patch(arrow1)
+    plt.gca().add_patch(arrow2)
+
     for i in range(0, len(x_polynomes_arr)):
         plt.plot(x_polynomes_arr[i], y_polynomes_arr[i], color='orange')
-        #plt.plot([vector1[0],points[0][0]],[vector1[1],points[0][1]], color='black')
-        fig.canvas.draw_idle()
+    fig.canvas.draw_idle()
 
 plt.show()
 
