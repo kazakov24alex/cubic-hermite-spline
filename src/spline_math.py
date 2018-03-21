@@ -1,15 +1,14 @@
-import os
 import numpy as np
 
 #################################################################
 ###                           ZERO                            ###
 #################################################################
 
-# нулевой столбец // 4x1
+# zero column // 4x1
 def make_zero4_column():
     return np.matrix([[0.], [0.], [0.], [0.]])
 
-# нулевая матрица // 4x4
+# zero matrix // 4x4
 def make_zero4x4_matrix():
     zero_col = make_zero4_column()
     return np.concatenate((zero_col,zero_col,zero_col,zero_col), axis=1)
@@ -18,26 +17,26 @@ def make_zero4x4_matrix():
 #################################################################
 ###                        T MATRIX                           ###
 #################################################################
-# T(x) значение функции в точке // 4x1
+# T(x) function value at the point // 4x1
 def make_T_column(point):
     x = point
     return np.matrix([[1.], [x], [x**2], [x**3]])
 
-# T'(x) первая производная функции в точке // 4x1
+# T'(x) function first derivative at the point // 4x1
 def make_Td_column(point):
     x = point
     return np.matrix([[0.], [1.], [2*x], [3*(x**2)]])
 
-# T''(x) вторая производная функции в точке // 4x1
+# T''(x) function second derivative at the point  // 4x1
 def make_Tdd_column(point):
     x = point
     return np.matrix([[0.], [0.], [2.], [6*x]])
 
 
 #################################################################
-###                     A,B,C,D MATRIX                        ###
+###                    A,B,C,D MATRIXES                       ###
 #################################################################
-# Матрица A = [T(a), T(b), T'(b), T''(b)] // 4x4
+# Matrix A = [T(a), T(b), T'(b), T''(b)] // 4x4
 def make_A_matrix(a_point, b_point):
     col1 = make_T_column(a_point)
     col2 = make_T_column(b_point)
@@ -54,8 +53,9 @@ def make_B_matrix(a_point):
 
     return np.concatenate((col1, col2, col3, col4), axis=1)
 
-# Матрица C = [T(a_n), T(b1), O, T''(b_n)] // 4x4
-# Hermite: C = [T(a_n), T(b1), O, T'(b_n)]
+# Matrix C  // 4x4
+# Free:     C = [T(a_n), T(b1), O, T''(b_n)]
+# Hermite:  C = [T(a_n), T(b1), O, T'(b_n)]
 def make_C_matrix(a1, b1, an, bn, hermite=False):
     col1 = make_T_column(an)
     col2 = make_T_column(b1)
@@ -65,8 +65,9 @@ def make_C_matrix(a1, b1, an, bn, hermite=False):
         col4 = make_Td_column(bn)
     return np.concatenate((col1, col2, col3, col4), axis=1)
 
-# Матрица D = [O, O, -T''(a1), O] // 4x4
-# Hermite: D = [O, O, -T'(a1), O]
+# Matrix D  // 4x4
+# Free:     D= [O, O, -T''(a1), O]
+# Hermite:  D = [O, O, -T'(a1), O]
 def make_D_matrix(a1, hermite=False):
     col1 = make_zero4_column()
     col2 = make_zero4_column()
@@ -81,8 +82,9 @@ def make_D_matrix(a1, hermite=False):
 ###                        U MATRIX                           ###
 #################################################################
 
-# Строка U = [P_(i-1), P_i, O, O] // 2x4
-# Hermite U = [P_(i-1),P_i, Vector1, Vector2]
+# Row U     // 2x4
+# Free:     Ur = [P_(i-1), P_i, O, O]
+# Hermite:  Ur = [P_(i-1),P_i, Vector1, Vector2]
 def make_U_row(a_point, b_point, vector1 = None, vector2 = None):
     x1 = a_point[0]
     y1 = a_point[1]
@@ -95,7 +97,7 @@ def make_U_row(a_point, b_point, vector1 = None, vector2 = None):
 
     return np.matrix([[x1, x2, vector1[0], vector2[0]], [y1, y2, vector1[1], vector2[1]]])
 
-# Матрица U = [U1, U2, ..., Un] // 2x4n
+# Matrix U = [U1, U2, ..., Un] // 2x4n
 def make_U_matrix(source_points, vector1=None, vector2=None):
     U_matrix = make_U_row(source_points[0], source_points[1])
 
@@ -113,7 +115,7 @@ def make_U_matrix(source_points, vector1=None, vector2=None):
 ###                        Q MATRIX                           ###
 #################################################################
 
-# Матрица Q // 4nx4n
+# Matrix Q // 4nx4n
 def make_Q_matrix(source_points, hermite=False):
     interval_num = len(source_points) - 1
 
@@ -124,7 +126,7 @@ def make_Q_matrix(source_points, hermite=False):
 
     return Q_matrix
 
-# Строка матрица Q // 4x4n
+# Row Q // 4x4n
 def make_Q_raw(idx, num, source_points, hermite=False):
     # ADD FIRST CELL
     Q_raw = make_zero4x4_matrix()
@@ -132,7 +134,6 @@ def make_Q_raw(idx, num, source_points, hermite=False):
         Q_raw = make_A_matrix(0, 1)
     elif (idx == 2):
         Q_raw = make_B_matrix(0) * (-1)
-    #print(Q_raw)
 
     # ADD CELL FROM 2 TO N-1
     for i in range(2, num):
@@ -142,7 +143,6 @@ def make_Q_raw(idx, num, source_points, hermite=False):
         elif (i == (idx-1)):
             Q_el = make_B_matrix(0) * (-1)
         Q_raw = np.concatenate((Q_raw, Q_el), axis=1)
-        #print(Q_raw)
 
     # ADD LAST CELL
     Q_el_last = make_zero4x4_matrix()
@@ -151,7 +151,6 @@ def make_Q_raw(idx, num, source_points, hermite=False):
     elif (idx == num):
         Q_el_last = make_C_matrix(0, 1, 0, 1, hermite)
     Q_raw = np.concatenate((Q_raw, Q_el_last), axis=1)
-    #print(Q_raw)
 
     return Q_raw
 
@@ -167,10 +166,9 @@ def calculate_free_S_matrix(source_points):
     S_matrix = U_matrix * Q_matrix.I
     return S_matrix
 
-# S Matrix: hermite pline // 2x4n
+# S Matrix // 2x4n
 def calculate_hermite_S_matrix(source_points, vector1, vector2):
     U_matrix = make_U_matrix(source_points, vector1, vector2)
-    print(U_matrix)
     Q_matrix = make_Q_matrix(source_points, hermite=True)
 
     S_matrix = U_matrix * Q_matrix.I
@@ -180,6 +178,8 @@ def calculate_hermite_S_matrix(source_points, vector1, vector2):
 #################################################################
 ###                   S MATRIX COMPUTING                      ###
 #################################################################
+
+# Extracting two arrays of x and y points from S matrix
 def get_points_from_S_matrix(S_matrix):
     x_polynomes_points = []
     y_polynomes_points = []
@@ -214,10 +214,12 @@ def get_points_from_S_matrix(S_matrix):
 ###                       GET SPLINE                          ###
 #################################################################
 
+# Get points of free spline
 def get_free_spline(source_points):
     S_matrix = calculate_free_S_matrix(source_points)
     return get_points_from_S_matrix(S_matrix)
 
+# Get points of Hermite spline
 def get_hermite_spline(source_points, vector1, vector2):
     S_matrix = calculate_hermite_S_matrix(source_points, vector1, vector2)
     return get_points_from_S_matrix(S_matrix)
