@@ -8,8 +8,10 @@ from spline_math import get_free_spline, get_hermite_spline
 
 # GRAPH SETTINGS
 fig = plt.figure()
+fig.canvas.set_window_title('Splines')
 ax = fig.add_subplot(111)
 ax.set_axisbelow(True)
+ax.set_aspect('equal')
 plt.grid(True)
 plt.xlim([-5,5])
 plt.ylim([-5,5])
