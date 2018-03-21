@@ -1,6 +1,3 @@
-# cubic-hermite-spline
-Cubic Free and Hermite Spline
-
 # Cubic Free and Hermite Splines
 Construction of free and Hermite splines passing through assigned points.
 
