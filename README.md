@@ -2,9 +2,9 @@
 Construction of free and Hermite splines passing through assigned points.
 
 ## How it works
-Arrange the points by clicking on the graph.
-The first and last points are beginnings of the first and final vectors necessary to construct a Hermite spline.
-TO BUILD SPLINES: press 'p' key.
+Arrange the points by clicking on the graph.<br/>
+The first and last points are beginnings of the first and final vectors necessary to construct a Hermite spline.<br/>
+TO BUILD SPLINES: press 'p' key.<br/>
 
 ## Example of work
 <p align="center">
