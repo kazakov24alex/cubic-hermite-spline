@@ -1,18 +1,14 @@
 # cubic-hermite-spline
 Cubic Free and Hermite Spline
 
-# Cyclogons
-My first work written on a python.
-The goal is to create the regular rolling polygon on an inclined straight line.
+# Cubic Free and Hermite Splines
+Construction of free and Hermite splines passing through assigned points.
 
 ## How it works
-Change the coordinates of the ends of a line segment in the code.
-<p align="center">
-  <img src="https://github.com/kazakov24alex/cyclogons/blob/master/docs/pic1.png"/>
-</p>
+Arrange the points by clicking on the graph.
+The first and last points are beginnings of the first and final vectors necessary to construct a Hermite spline.
 
 ## Example of work
 <p align="center">
-  <img src="https://github.com/kazakov24alex/cyclogons/blob/master/docs/pic2.png"/>
-  <img src="https://github.com/kazakov24alex/cyclogons/blob/master/docs/pic3.png"/>
+  <img src="https://github.com/kazakov24alex/cubic-hermite-spline/blob/master/docs/pic1.png"/>
 </p>
